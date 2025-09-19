@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>SISTEMA DE CONSULTA</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 20px; text-transform: uppercase; }
+    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 20px; }
+    .linha { display: flex; align-items: center; margin-bottom: 15px; }
+    .linha label { width: 150px; font-weight: bold; }
+    .linha input, .linha select { flex: 1; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; }
+    .linha button { margin-left: 10px; padding: 8px 12px; cursor: pointer; border: none; border-radius: 6px; background: #0077cc; color: #fff; font-weight: bold; }
+    .linha button:hover { background: #005fa3; }
+    .btn-grupo { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+    .btn-grupo button { background: #444; }
+    .btn-grupo button:hover { background: #222; }
+    .resultado { background: #eef; border: 1px solid #99c; border-radius: 6px; padding: 15px; min-height: 80px; margin-top: 20px; white-space: pre-line; }
+    
+        /* Card de descrição */
+    .descricao-card {
+      background: #ffffff;
+      border: 2px solid #1a73e8;   /* azul corporativo, pode mudar */
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      font-size: 15px;
+      line-height: 1.6;
+      color: #333;
+      white-space: pre-line; /* mantém quebras de linha do texto */
+    }
+
+    .descricao-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      color: #1a73e8;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>SISTEMA DE CONSULTA</h2>
+
+    <!-- Pesquisa Coluna A -->
+    <div class="linha">
+      <label>Código Baremo:</label>
+      <input type="text" id="pesqA" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <button onclick="pesquisar('A')">🔍</button>
+    </div>
+
+    <!-- Pesquisa Coluna C -->
+    <div class="linha">
+      <label>CODIGO DE VOZ:</label>
+      <input type="text" id="pesqC" maxlength="6" oninput="this.value=this.value.replace(/[^A-Z0-9]/g,'').toUpperCase()">
+      <button onclick="pesquisar('C')">🔍</button>
+    </div>
+
+    <!-- Pesquisa Coluna G -->
+    <div class="linha">
+      <label>CODIGO PRESTAÇÃO:</label>
+      <input type="text" id="pesqG" maxlength="6" oninput="this.value=this.value.replace(/[^A-Z0-9]/g,'').toUpperCase()">
+      <button onclick="pesquisar('G')">🔍</button>
+    </div>
+
+    <!-- Botões BT / MT -->
+    <div class="btn-grupo">
+      <button onclick="filtrarTipo('BT')">BT</button>
+      <button onclick="filtrarTipo('MT')">MT</button>
+    </div>
+
+    <!-- Lista suspensa Coluna B -->
+    <div class="linha">
+      <label>LISTA DE BAREMOS:</label>
+      <select id="listaB" onchange="selecionarB()"></select>
+    </div>
+
+    <!-- Resultado / Descrição -->
+    <div class="resultado" id="resultado">RESULTADO SERÁ EXIBIDO AQUI...</div>
+  </div>
+
+     
+    <p style="text-align: center; font-style: italic; font-family: 'Courier New', Courier, monospace; margin-top: 40px;">
+        © 2025 Emanuel Aguiar
+    </p>
+  <script>
+    let cabecalho = [];
+    let dados = [];
+
+    // Carregar CSV
+    async function carregarCSV() {
+      const resposta = await fetch("dados.csv");
+      const texto = await resposta.text();
+
+      const linhas = texto.trim().split("\n").map(l => l.split(";"));
+      cabecalho = linhas[0];
+      dados = linhas.slice(1);
+
+      // Preencher lista suspensa (coluna B = índice 1)
+      const valoresB = [...new Set(dados.map(l => l[1]))].sort();
+      const lista = document.getElementById("listaB");
+      lista.innerHTML = `<option value="">--SELECIONE--</option>` + valoresB.map(v => `<option>${v}</option>`).join("");
+    }
+
+    // Pesquisa nas colunas
+    function pesquisar(coluna) {
+      let idx = { "A":0, "C":2, "G":6 }[coluna];
+      let valor = document.getElementById("pesq"+coluna).value.trim().toUpperCase();
+      if (!valor) return alert("DIGITE UM VALOR!");
+
+      let registro = dados.find(l => l[idx] === valor);
+      if (registro) {
+        mostrarResultado(registro);
+      } else {
+        document.getElementById("resultado").innerText = "NENHUM REGISTRO ENCONTRADO!";
+      }
+    }
+
+    // Filtrar por BT / MT (coluna D = índice 3)
+    function filtrarTipo(tipo) {
+      let registro = dados.find(l => l[3] === tipo);
+      if (registro) {
+        mostrarResultado(registro);
+      } else {
+        document.getElementById("resultado").innerText = "NENHUM REGISTRO COM TIPO " + tipo;
+      }
+    }
+
+    // Selecionar pela lista suspensa (coluna B = índice 1)
+    function selecionarB() {
+      let valor = document.getElementById("listaB").value;
+      if (!valor) return;
+      let registro = dados.find(l => l[1] === valor);
+      if (registro) {
+        mostrarResultado(registro);
+      }
+    }
+
+    function mostrarResultado(registro) {
+  let descricao = registro[9]; // Coluna J (descrição)
+
+  // Monta os campos principais dinamicamente (A, B, C, D, G)
+  let camposHTML = `
+    <div><strong>${cabecalho[0]}:</strong> ${registro[0]}</div>
+    <div><strong>${cabecalho[1]}:</strong> ${registro[1]}</div>
+    <div><strong>${cabecalho[2]}:</strong> ${registro[2]}</div>
+    <div><strong>${cabecalho[3]}:</strong> ${registro[3]}</div>
+    <div><strong>${cabecalho[6]}:</strong> ${registro[6]}</div>
+  `;
+
+  // Exibe resultado + descrição em card
+  document.getElementById("resultado").innerHTML = `
+    <div style="padding:10px;">
+      ${camposHTML}
+      <div style="margin-top:15px;">
+        <strong>${cabecalho[9]}:</strong>
+        <div style="
+          background:#ffffff;
+          border:1px solid #ddd;
+          border-radius:12px;
+          padding:15px;
+          margin-top:8px;
+          box-shadow:0 2px 6px rgba(0,0,0,0.1);
+          font-size:14px;
+          line-height:1.4;
+        ">
+          ${descricao}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+    carregarCSV();
+  </script>
+</body>
+</html>
