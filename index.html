@@ -31,7 +31,7 @@
     .container { 
       width: 100%; 
       height: 100vh; 
-      max-width: 480px;   /* limite no desktop */
+      max-width: 660px;   /* limite no desktop */
       background: #fff; 
       padding: 25px; 
       border-radius: 0; 
@@ -213,7 +213,7 @@
     <!-- Pesquisa Coluna G -->
     <div class="linha">
       <label>CODIGO PRESTAÇÃO:</label>
-      <input type="text" id="pesqC" maxlength="6" 
+      <input type="text" id="pesqG" maxlength="6" 
   oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
       <button onclick="pesquisar('G')">🔍</button>
     </div>
@@ -237,43 +237,14 @@
     <div class="resultado" id="resultado">RESULTADO SERÁ EXIBIDO AQUI...</div>
   </div>
   
-  <script>
-    let cabecalho = [];
-    let dados = [];
+<script>
+let cabecalho = [];
+let dados = [];
+let filtroAtivo = null; // guarda qual filtro está ativo (BT ou MT)
 
-    // Carregar CSV
-    async function carregarCSV() {
-      const resposta = await fetch("dados.csv");
-      const texto = await resposta.text();
-
-      const linhas = texto.trim().split("\n").map(l => l.split(";"));
-      cabecalho = linhas[0];
-      dados = linhas.slice(1);
-
-      // Preencher lista suspensa (coluna B = índice 1)
-      const valoresB = [...new Set(dados.map(l => l[1]))].sort();
-      const lista = document.getElementById("listaB");
-      lista.innerHTML = `<option value="">--SELECIONE--</option>` + valoresB.map(v => `<option>${v}</option>`).join("");
-    }
-
-    // Pesquisa nas colunas
-    function pesquisar(coluna) {
-      let idx = { "A":0, "C":2, "G":6 }[coluna];
-      let valor = document.getElementById("pesq"+coluna).value.trim().toUpperCase();
-      if (!valor) return alert("DIGITE UM VALOR!");
-
-      let registro = dados.find(l => l[idx] === valor);
-      if (registro) {
-        mostrarResultado(registro);
-      } else {
-        document.getElementById("resultado").innerText = "NENHUM REGISTRO ENCONTRADO!";
-      }
-    }
-
-    // Filtrar por BT / MT (coluna D = índice 3)
-    let filtroAtivo = null; // guarda qual filtro está ativo (BT ou MT)
-
-  async function carregarCSV() {
+// Carregar CSV
+async function carregarCSV() {
+  try {
     const resposta = await fetch("dados.csv");
     const texto = await resposta.text();
 
@@ -281,73 +252,83 @@
     cabecalho = linhas[0];
     dados = linhas.slice(1);
 
-    atualizarLista(); // popula lista inicialmente sem filtro
+    atualizarLista(true); // preenche lista completa sem filtro
+  } catch (erro) {
+    console.error("Erro ao carregar CSV:", erro);
+    document.getElementById("resultado").innerText = "ERRO AO CARREGAR DADOS!";
   }
+}
 
-  // Atualiza lista suspensa considerando o filtro ativo
-  function atualizarLista() {
-    let filtrados = filtroAtivo 
-      ? dados.filter(l => l[3] === filtroAtivo) 
-      : dados;
+// Atualiza lista suspensa considerando o filtro ativo
+function atualizarLista(incluirDuplicados = false) {
+  let filtrados = filtroAtivo ? dados.filter(l => l[3] === filtroAtivo) : dados;
 
-    const valoresB = [...new Set(filtrados.map(l => l[1]))].sort();
-    const lista = document.getElementById("listaB");
-    lista.innerHTML = `<option value="">--SELECIONE--</option>` 
-      + valoresB.map(v => `<option>${v}</option>`).join("");
+  let valoresB = incluirDuplicados ? filtrados.map(l => l[1]) : [...new Set(filtrados.map(l => l[1]))];
+
+  const lista = document.getElementById("listaB");
+  lista.innerHTML = `<option value="">--SELECIONE--</option>` + valoresB.map(v => `<option>${v}</option>`).join("");
+}
+
+// Pesquisa nas colunas
+function pesquisar(coluna) {
+  let idxMap = { "A": 0, "C": 2, "G": 6 };
+  let idx = idxMap[coluna];
+  let inputId = { "A": "pesqA", "C": "pesqC", "G": "pesqG" }[coluna];
+
+  let valor = document.getElementById(inputId).value.trim().toUpperCase();
+  if (!valor) return alert("DIGITE UM VALOR!");
+
+  let registro = dados.find(l => l[idx].toUpperCase() === valor);
+  if (registro) {
+    mostrarResultado(registro);
+  } else {
+    document.getElementById("resultado").innerText = "NENHUM REGISTRO ENCONTRADO!";
   }
+}
 
-  // Ativa filtro BT/MT
-  function filtrarTipo(tipo, botao) {
-    // remove estado ativo de todos os botões
-    document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
+// Ativa filtro BT/MT
+function filtrarTipo(tipo, botao) {
+  document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
+  filtroAtivo = tipo;
+  botao.classList.add("ativo");
+  atualizarLista();
+  document.getElementById("resultado").innerText = `LISTA FILTRADA PELO TIPO ${tipo}`;
+}
 
-    // define filtro ativo
-    filtroAtivo = tipo;
-    botao.classList.add("ativo");
-
-    atualizarLista(); // repopula lista filtrada
-    document.getElementById("resultado").innerText = `LISTA FILTRADA PELO TIPO ${tipo}`;
+// Selecionar pela lista suspensa (coluna B)
+function selecionarB() {
+  let valor = document.getElementById("listaB").value;
+  if (!valor) return;
+  let registro = dados.find(l => l[1] === valor && (!filtroAtivo || l[3] === filtroAtivo));
+  if (registro) {
+    mostrarResultado(registro);
   }
+}
 
-  // Selecionar pela lista suspensa (coluna B = índice 1)
-  function selecionarB() {
-    let valor = document.getElementById("listaB").value;
-    if (!valor) return;
-    let registro = dados.find(l => l[1] === valor && (!filtroAtivo || l[3] === filtroAtivo));
-    if (registro) {
-      mostrarResultado(registro);
-    }
-  }
+// Limpa todos os filtros, pesquisas e resultados
+function limparFiltros() {
+  // Desativa filtros BT/MT
+  filtroAtivo = null;
+  document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
 
-  // Limpa tudo
-  function limparFiltros() {
-    filtroAtivo = null;
-    document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
+  // Limpa todos os inputs
+  document.getElementById("pesqA").value = "";
+  document.getElementById("pesqC").value = "";
+  document.getElementById("pesqG").value = "";
 
-    document.getElementById("pesqA").value = "";
-    document.getElementById("pesqC").value = "";
-    document.getElementById("pesqG").value = "";
-    document.getElementById("listaB").value = "";
-    document.getElementById("resultado").innerText = "RESULTADO SERÁ EXIBIDO AQUI...";
+  // Limpa seleção da lista de Baremos
+  document.getElementById("listaB").value = "";
 
-    atualizarLista(); // volta lista completa
-  }
+  // Limpa resultado/descrição
+  document.getElementById("resultado").innerText = "RESULTADO SERÁ EXIBIDO AQUI...";
 
+  // Atualiza lista para mostrar todos os Baremos (incluindo repetidos)
+  atualizarLista(true);
+}
 
-    // Selecionar pela lista suspensa (coluna B = índice 1)
-    function selecionarB() {
-      let valor = document.getElementById("listaB").value;
-      if (!valor) return;
-      let registro = dados.find(l => l[1] === valor);
-      if (registro) {
-        mostrarResultado(registro);
-      }
-    }
-
-    function mostrarResultado(registro) {
+// Exibe o resultado em formato de card
+function mostrarResultado(registro) {
   let descricao = registro[9]; // Coluna J (descrição)
-
-  // Monta os campos principais dinamicamente (A, B, C, D, G)
   let camposHTML = `
     <div><strong>${cabecalho[0]}:</strong> ${registro[0]}</div>
     <div><strong>${cabecalho[1]}:</strong> ${registro[1]}</div>
@@ -355,8 +336,6 @@
     <div><strong>${cabecalho[3]}:</strong> ${registro[3]}</div>
     <div><strong>${cabecalho[6]}:</strong> ${registro[6]}</div>
   `;
-
-  // Exibe resultado + descrição em card
   document.getElementById("resultado").innerHTML = `
     <div style="padding:10px;">
       ${camposHTML}
@@ -378,7 +357,9 @@
     </div>
   `;
 }
-    carregarCSV();
-  </script>
+
+// Inicializa carregamento do CSV
+carregarCSV();
+</script>
 </body>
 </html>
