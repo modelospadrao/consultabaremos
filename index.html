@@ -86,23 +86,63 @@
 
 
     .resultado {
-      background:#f9fbff; 
-      border:1px solid #ccd; 
-      border-radius:16px; 
-      padding:15px;
-      margin-top:1px;
-      font-size:12px; 
+      background:#f9fbff;
+      border:1px solid #ccd;
+      border-radius:16px;
+      padding:16px;
+      margin-top:12px;
+      font-size:13px;
       color:#222;
-      line-height:0.7;        /* menos espaçamento entre linhas */
-      letter-spacing: normal; /* remove espaçamento extra */
-      text-transform: uppercase; /* garante tudo em maiúsculo */
-      white-space: pre-line; 
+      line-height:1.35;
+      letter-spacing: normal;
+      text-transform: uppercase;
+      white-space: normal;
+      word-wrap: break-word;
+      overflow: visible;
     }
 
-    .resultado strong {
-      font-weight: 700;        /* títulos em negrito */
-      margin-right: 3px;       /* dá respiro entre título e valor */
+    /* Cada linha de informação */
+    .resultado .linha-info {
+      display: flex;
+      justify-content: space-between; /* rótulo à esquerda, valor à direita */
+      margin-bottom: 6px;
     }
+
+    /* Rótulo (esquerda) */
+    .resultado .linha-info strong {
+      font-weight: 700;
+      margin-right: 10px;
+    }
+
+    /* Valor (direita) */
+    .resultado .linha-info span {
+      text-align: right;
+      flex: 1;
+    }
+
+    /* Descrição normal (quebra de linha inteligente, alinhada à direita) */
+    .resultado .descricao {
+      text-align: right;
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+
+    /* Caixa de "Descrição da Ação" expansiva */
+    .resultado .descricao-acao {
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:12px;
+      padding:12px;
+      margin-top:10px;
+      font-size:13px;
+      line-height:1.4;
+      white-space: pre-wrap;   /* respeita quebras manuais */
+      word-wrap: break-word;   /* quebra automático */
+      text-align: left;        /* texto dentro da caixa alinhado à esquerda */
+    }
+
     .assinatura { position:fixed; bottom:10px; left:0; right:0; text-align:center; font-style:italic; font-family:'Courier New',monospace; font-size:13px; color:#555; }
 
     /* -------- POPUP (estilo que você enviou) -------- */
