@@ -2,112 +2,61 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SISTEMA DE CONSULTA BAREMOS</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 20px; text-transform: uppercase; }
-    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; margin-bottom: 20px; }
-    .linha { display: flex; align-items: center; margin-bottom: 15px; }
-    .linha label { width: 150px; font-weight: bold; }
-    .linha input, .linha select { flex: 1; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; }
-    .linha button { margin-left: 10px; padding: 8px 12px; cursor: pointer; border: none; border-radius: 6px; background: #0077cc; color: #fff; font-weight: bold; }
-    .linha button:hover { background: #005fa3; }
-    .btn-grupo { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
-    .btn-grupo button { background: #444; }
-    .btn-grupo button:hover { background: #222; }
-    .resultado { background: #eef; border: 1px solid #99c; border-radius: 6px; padding: 15px; min-height: 80px; margin-top: 20px; white-space: pre-line; }
-    
-   body { 
-      font-family: "Segoe UI", Arial, sans-serif; 
-      background: #f0f2f5; 
-      margin: 0; 
-      padding: 0; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 97vh; 
+    /* --- seu CSS (resumido/ajustado) --- */
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 97vh;
+      text-transform: uppercase;
+      font-size: 16px; /* base confortável para celular */
     }
-
-    .container { 
-      width: 100%; 
-      height: 84vh; 
-      max-width: 750px;   /* limite no desktop */
-      background: #fff; 
-      padding: 55px; 
-      border-radius: 0; 
-      box-shadow: 0 0 0 rgba(0,0,0,0); 
-      display: flex; 
-      flex-direction: column; 
+    .container {
+      width: 100%;
+      height: 84vh;
+      max-width: 750px;
+      background: #fff;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
     }
-
-    h2 { 
-      text-align: center; 
-      margin-bottom: 25px; 
-      font-size: 24px; 
-      font-weight: bold; 
-      color: #222; 
-      letter-spacing: 1px;
+    h2 { text-align:center; margin-bottom:14px; color:#222; font-size:22px; }
+    .linha {
+      display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;
     }
-
-    /* Linhas de inputs */
-    .linha { 
-      display: flex; 
-      align-items: center; 
-      margin-bottom: 18px; 
-      gap: 10px;
-      flex-wrap: wrap;
+    .linha label { min-width:140px; font-weight:700; color:#333; }
+    .linha input, .linha select {
+      flex:1; padding:12px; font-size:16px; border-radius:12px; border:1px solid #ccc;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+      text-transform: uppercase;
     }
-
-    .linha label { 
-      font-weight: bold; 
-      font-size: 16px; 
-      color: #333; 
-      min-width: 140px;
+    .linha button {
+      padding:10px 14px; border-radius:12px; border:none; background:#0077cc; color:#fff;
+      cursor:pointer; font-weight:700;
     }
-
-    .linha input, 
-    .linha select { 
-      flex: 1; 
-      padding: 12px; 
-      font-size: 16px; 
-      border: 1px solid #ccc; 
-      border-radius: 12px; 
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); 
-      max-width: 100%; 
-    }
-
-    /* Botão lupa */
-    .linha button { 
-      padding: 10px 14px; 
-      cursor: pointer; 
-      border: none; 
-      border-radius: 12px; 
-      background: #0077cc; 
-      color: #fff; 
-      font-weight: bold; 
-      font-size: 16px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-      transition: 0.2s;
-    }
-
-    .linha button:hover { 
-      background: #005fa3; 
-    }
-
-    /* Grupo de botões */
-    .btn-grupo { 
-      display: flex; 
-      gap: 14px; 
-      justify-content: center; 
-      margin: 25px 0; 
+    .btn-grupo {
+      display: flex;
+      justify-content: center;   /* centraliza no container */
+      gap: 20px;                 /* espaço entre botões */
+      flex-wrap: wrap;           /* quebra linha se não couber */
+      margin: 25px 0;
     }
 
     .btn-grupo button { 
-      flex: 1;
+      min-width: 120px;          /* largura mínima confortável */
+      flex: 0 0 auto;            /* não estica mais que o necessário */
       background: #fff; 
       color: #000; 
       border: 2px solid #000; 
-      padding: 14px; 
+      padding: 14px 22px;        /* mais espaço lateral */
       border-radius: 14px; 
       font-weight: bold; 
       font-size: 18px;
@@ -135,262 +84,211 @@
       background: #900 !important; 
     }
 
-    /* Resultado */
-    .resultado { 
-      background: #f9fbff; 
-      border: 1px solid #ccd; 
-      border-radius: 16px; 
-      padding: 20px; 
-      flex: 1; 
-      margin-top: 20px; 
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-      white-space: pre-line; 
-      font-size: 16px; 
-      font-weight: 500;
-      color: #333;
-      overflow-y: auto;
+
+    .resultado {
+      background:#f9fbff; border:1px solid #ccd; border-radius:16px; padding:18px;
+      flex:1; margin-top:12px; overflow-y:auto; font-size:15px; color:#222;
     }
 
-    /* Responsivo */
-    @media (max-width: 600px) {
-      .linha { 
-        flex-direction: column; 
-        align-items: stretch; 
-      }
+    .assinatura { position:fixed; bottom:10px; left:0; right:0; text-align:center; font-style:italic; font-family:'Courier New',monospace; font-size:13px; color:#555; }
 
-      .linha label { 
-        min-width: unset; 
-        margin-bottom: 6px; 
-        font-size: 18px;
-      }
-
-      .linha input, 
-      .linha select { 
-        width: 100%; 
-        font-size: 18px; 
-      }
-
-      .linha button { 
-        align-self: flex-end; 
-        margin-top: 6px;
-      }
-    }
-        .assinatura {
+    /* -------- POPUP (estilo que você enviou) -------- */
+    .popup {
+      display: none; /* IMPORTANT: mantido como NONE por padrão */
       position: fixed;
-      bottom: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-style: italic;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
-      color: #555;
-    }
-   /* Caixa da lista suspensa */
-    .popup-lista {
-      display: none; /* começa oculta */
-      position: absolute;
-      top: 100%; 
-      left: 0;
-      right: 0;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      max-height: 250px;
-      overflow-y: auto;
-      margin-top: 4px;
-      z-index: 2000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      font-size: 16px;
-    }
-
-    /* Itens da lista */
-    .popup-lista div {
-      padding: 12px;
-      cursor: pointer;
-      border-bottom: 1px solid #eee;
-      transition: background 0.2s;
-    }
-    .popup-lista div:hover {
-      background: #0077cc;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 92%;
+      max-width: 520px;
+      max-height: 92vh;
+      background-color: rgba(0,0,0,0.88);
       color: #fff;
+      padding: 27px;
+      border-radius: 26px;
+      z-index: 3000;
+      box-shadow: 0 0 18px rgba(0,0,0,0.6);
+      text-align: left;
+      overflow: hidden;
+      box-sizing: border-box;
+      /* NÃO colocar display:flex aqui; usar .popup.open para exibir */
+      flex-direction: column;
+    }
+    .popup.open { display: flex; } /* só quando tiver a classe 'open' */
+
+    #pesquisaPopup {
+      width:100%; padding:12px; border-radius:8px; border:none; margin-bottom:10px; font-size:16px;
+      box-sizing: border-box;
+      text-transform: uppercase;
     }
 
-    /* Responsividade para celular */
-    @media (max-width: 600px) {
-      #filtroB {
-        font-size: 18px;
-        padding: 14px;
-      }
-      .popup-lista {
-        font-size: 18px;
-        max-height: 50vh; /* ocupa metade da tela */
-      }
+    .popup-lista {
+      flex:1; overflow-y:auto; background: rgba(255,255,255,0.06);
+      border-radius:8px; padding:4px; margin-bottom:10px;
+    }
+    .popup-lista .item {
+      padding:12px; border-bottom:1px solid rgba(255,255,255,0.08); cursor:pointer; font-size:15px;
+    }
+    .popup-lista .item:hover { background:#0077cc; color:#fff; }
+
+    .popup-buttons { display:flex; justify-content:center; gap:8px; }
+    /* botão vermelho já existente no seu CSS (button-clear) */
+    .button-clear {
+      background-color: #f44336;
+      color: #fff;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 4px;
+      border: none;
     }
 
-
+    @media (max-width:600px) {
+      body { font-size: 17px; }
+      #pesquisaPopup { font-size:18px; padding:14px; }
+      .popup-lista .item { font-size:18px; padding:14px; }
+    }
   </style>
 </head>
 <body>
-  
   <div class="container">
     <h2>SISTEMA DE CONSULTA BAREMOS</h2>
     <p class="assinatura">© 2025 Emanuel Aguiar</p>
-    <!-- Pesquisa Coluna A -->
+
+    <!-- Pesquisas A / C / G -->
     <div class="linha">
       <label>Código Baremo:</label>
       <input type="text" id="pesqA" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
       <button onclick="pesquisar('A')">🔍</button>
     </div>
 
-    <!-- Pesquisa Coluna C -->
     <div class="linha">
       <label>CODIGO DE VOZ:</label>
-      <input type="text" id="pesqC" maxlength="6" 
-  oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
+      <input type="text" id="pesqC" maxlength="6" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
       <button onclick="pesquisar('C')">🔍</button>
     </div>
 
-    <!-- Pesquisa Coluna G -->
     <div class="linha">
       <label>CODIGO PRESTAÇÃO:</label>
-      <input type="text" id="pesqG" maxlength="6" 
-  oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
+      <input type="text" id="pesqG" maxlength="6" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
       <button onclick="pesquisar('G')">🔍</button>
     </div>
 
-    <!-- Botões BT / MT -->
     <div class="btn-grupo">
-  <button id="btnBT" onclick="filtrarTipo('BT', this)">BT</button>
-  <button id="btnMT" onclick="filtrarTipo('MT', this)">MT</button>
-  <button class="btn-limpar" onclick="limparFiltros()">LIMPAR</button>
+      <button id="btnBT" onclick="filtrarTipo('BT', this)">BT</button>
+      <button id="btnMT" onclick="filtrarTipo('MT', this)">MT</button>
+      <button class="btn-limpar" onclick="limparFiltros()">LIMPAR</button>
     </div>
 
-   <!-- Resultado / Descrição -->
-    <div class="resultado" id="resultado">descrição da atividade selecionada...</div><BR>
+    <div class="resultado" id="resultado">descrição da atividade selecionada...</div>
 
-    <!-- Lista suspensa Coluna B -->
-    <div class="linha" style="position: relative; flex-direction: column; align-items: stretch;">
+    <!-- Botão que abre a lista -->
+    <div class="linha" style="margin-top:12px;">
       <label>LISTA DE BAREMOS:</label>
-      <input type="text" id="filtroB" placeholder="Digite para filtrar...">
-      <div id="popupListaB" class="popup-lista"></div>
+      <button id="abrirLista" class="button-default">Abrir Lista</button>
     </div>
-    
   </div>
-  
+
+  <!-- POPUP estilo referência (inicia escondido) -->
+  <div id="popupBaremos" class="popup" role="dialog" aria-hidden="true">
+    <h3 style="margin:0 0 10px 0;">Lista de Baremos</h3>
+    <input type="text" id="pesquisaPopup" placeholder="Digite para filtrar...">
+    <div id="listaPopup" class="popup-lista" aria-label="lista de baremos"></div>
+    <div class="popup-buttons">
+      <button id="fecharPopup" class="button-clear">Fechar</button>
+    </div>
+  </div>
+
 <script>
+/* ---------------- Dados / funções principais ---------------- */
 let cabecalho = [];
 let dados = [];
-let filtroAtivo = null; // guarda qual filtro está ativo (BT ou MT)
+let filtroAtivo = null;
 
-// Carregar CSV
+// Carregar CSV (mantive sua lógica, mas sem forçar atualizar lista que não existe)
 async function carregarCSV() {
   try {
     const resposta = await fetch("dados.csv");
     const texto = await resposta.text();
-
     const linhas = texto.trim().split("\n").map(l => l.split(";"));
-    cabecalho = linhas[0];
-    dados = linhas.slice(1);
+    cabecalho = linhas[0] || [];
+    dados = linhas.slice(1) || [];
 
-    atualizarLista(true); // preenche lista completa sem filtro
+    // Se existir um <select id="listaB"> (compatib. antiga), atualiza — senão ignora.
+    if (document.getElementById("listaB")) {
+      atualizarLista(true);
+    }
   } catch (erro) {
     console.error("Erro ao carregar CSV:", erro);
-    document.getElementById("resultado").innerText = "ERRO AO CARREGAR DADOS!";
+    const el = document.getElementById("resultado");
+    if (el) el.innerText = "ERRO AO CARREGAR DADOS!";
   }
 }
 
-// Atualiza lista suspensa considerando o filtro ativo
+/* função segura para compatibilidade com código antigo */
 function atualizarLista(incluirDuplicados = false) {
-  let filtrados = filtroAtivo ? dados.filter(l => l[3] === filtroAtivo) : dados;
-
-  let valoresB = incluirDuplicados ? filtrados.map(l => l[1]) : [...new Set(filtrados.map(l => l[1]))];
-
   const lista = document.getElementById("listaB");
+  if (!lista) return; // nada a fazer se não existir
+  let filtrados = filtroAtivo ? dados.filter(l => l[3] === filtroAtivo) : dados;
+  let valoresB = incluirDuplicados ? filtrados.map(l => l[1]) : [...new Set(filtrados.map(l => l[1]))];
   lista.innerHTML = `<option value="">--SELECIONE--</option>` + valoresB.map(v => `<option>${v}</option>`).join("");
 }
 
-// Pesquisa nas colunas
 function pesquisar(coluna) {
   let idxMap = { "A": 0, "C": 2, "G": 6 };
   let idx = idxMap[coluna];
   let inputId = { "A": "pesqA", "C": "pesqC", "G": "pesqG" }[coluna];
-
   let valor = document.getElementById(inputId).value.trim().toUpperCase();
   if (!valor) return alert("DIGITE UM VALOR!");
-
-  let registro = dados.find(l => l[idx].toUpperCase() === valor);
-  if (registro) {
-    mostrarResultado(registro);
-  } else {
-    document.getElementById("resultado").innerText = "NENHUM REGISTRO ENCONTRADO!";
-  }
+  let registro = dados.find(l => (l[idx] || "").toUpperCase() === valor);
+  if (registro) mostrarResultado(registro);
+  else document.getElementById("resultado").innerText = "NENHUM REGISTRO ENCONTRADO!";
 }
 
-// Ativa filtro BT/MT
 function filtrarTipo(tipo, botao) {
   document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
   filtroAtivo = tipo;
   botao.classList.add("ativo");
-  atualizarLista();
+  // atualizarLista só quando o select existir (compatibilidade)
+  if (document.getElementById("listaB")) atualizarLista();
   document.getElementById("resultado").innerText = `LISTA FILTRADA PELO TIPO ${tipo}`;
 }
 
-// Selecionar pela lista suspensa (coluna B)
-function selecionarB() {
-  let valor = document.getElementById("listaB").value;
-  if (!valor) return;
-  let registro = dados.find(l => l[1] === valor && (!filtroAtivo || l[3] === filtroAtivo));
-  if (registro) {
-    mostrarResultado(registro);
-  }
-}
-
-// Limpa todos os filtros, pesquisas e resultados
 function limparFiltros() {
-  // Desativa filtros BT/MT
   filtroAtivo = null;
   document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
-
-  // Limpa todos os inputs
   document.getElementById("pesqA").value = "";
   document.getElementById("pesqC").value = "";
   document.getElementById("pesqG").value = "";
-
-  // Limpa seleção da lista de Baremos
-  document.getElementById("listaB").value = "";
-
-  // Limpa resultado/descrição
+  if (document.getElementById("listaB")) document.getElementById("listaB").value = "";
   document.getElementById("resultado").innerText = "RESULTADO SERÁ EXIBIDO AQUI...";
-
-  // Atualiza lista para mostrar todos os Baremos (incluindo repetidos)
-  atualizarLista(true);
+  if (document.getElementById("listaB")) atualizarLista(true);
 }
 
-// Exibe o resultado em formato de card
 function mostrarResultado(registro) {
-  let descricao = registro[9]; // Coluna J (descrição)
+  let descricao = registro[9] || "";
   let camposHTML = `
-    <div><strong>${cabecalho[0]}:</strong> ${registro[0]}</div>
-    <div><strong>${cabecalho[1]}:</strong> ${registro[1]}</div>
-    <div><strong>${cabecalho[2]}:</strong> ${registro[2]}</div>
-    <div><strong>${cabecalho[3]}:</strong> ${registro[3]}</div>
-    <div><strong>${cabecalho[6]}:</strong> ${registro[6]}</div>
+    <div><strong>${cabecalho[0] || 'A'}:</strong> ${registro[0] || ''}</div>
+    <div><strong>${cabecalho[1] || 'B'}:</strong> ${registro[1] || ''}</div>
+    <div><strong>${cabecalho[2] || 'C'}:</strong> ${registro[2] || ''}</div>
+    <div><strong>${cabecalho[3] || 'D'}:</strong> ${registro[3] || ''}</div>
+    <div><strong>${cabecalho[6] || 'G'}:</strong> ${registro[6] || ''}</div>
   `;
   document.getElementById("resultado").innerHTML = `
     <div style="padding:10px;">
       ${camposHTML}
-      <div style="margin-top:15px;">
-        <strong>${cabecalho[9]}:</strong>
+      <div style="margin-top:12px;">
+        <strong>${cabecalho[9] || 'DESCRIÇÃO'}:</strong>
         <div style="
           background:#ffffff;
           border:1px solid #ddd;
           border-radius:12px;
-          padding:15px;
+          padding:12px;
           margin-top:8px;
-          box-shadow:0 2px 6px rgba(0,0,0,0.1);
+          box-shadow:0 2px 6px rgba(0,0,0,0.06);
           font-size:14px;
           line-height:1.4;
+          color:#111;
         ">
           ${descricao}
         </div>
@@ -398,52 +296,78 @@ function mostrarResultado(registro) {
     </div>
   `;
 }
- // Renderiza lista suspensa (todos ou filtrados)
-  function renderizarLista(filtro = "") {
-    filtro = filtro.toUpperCase();
-    let filtrados = dados.filter(l => l[1].toUpperCase().includes(filtro) && (!filtroAtivo || l[3] === filtroAtivo));
 
-    let popup = document.getElementById("popupListaB");
-    popup.innerHTML = "";
+/* ---------------- Popup: abrir / fechar / renderizar lista ---------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  const abrirBtn = document.getElementById("abrirLista");
+  const popup = document.getElementById("popupBaremos");
+  const fecharBtn = document.getElementById("fecharPopup");
+  const pesquisa = document.getElementById("pesquisaPopup");
+  const listaContainer = document.getElementById("listaPopup");
 
+  function abrirPopup() {
+    popup.classList.add("open");
+    popup.setAttribute("aria-hidden","false");
+    pesquisa.value = "";           // limpa pesquisa ao abrir
+    renderizarPopupLista("");      // carrega todos
+    // opcional: não focar o input para evitar abrir teclado automaticamente
+    // pesquisa.focus(); // só descomente se quiser abrir teclado automaticamente
+  }
+
+  function fecharPopup() {
+    popup.classList.remove("open");
+    popup.setAttribute("aria-hidden","true");
+  }
+
+  abrirBtn.addEventListener("click", abrirPopup);
+  fecharBtn.addEventListener("click", fecharPopup);
+
+  // fecha ao clicar fora do conteúdo (clicar no overlay)
+  popup.addEventListener("click", (e) => {
+    if (e.target === popup) fecharPopup();
+  });
+
+  // filtrar enquanto digita
+  pesquisa.addEventListener("input", function () {
+    renderizarPopupLista(this.value);
+  });
+
+  // renderiza lista dentro do popup
+  function renderizarPopupLista(filtro = "") {
+    filtro = (filtro || "").toUpperCase();
+    const filtrados = dados.filter(l => {
+      const nome = (l[1] || "").toUpperCase();
+      const tipoOK = !filtroAtivo || (l[3] === filtroAtivo);
+      return tipoOK && nameMatches(nome, filtro);
+    });
+
+    listaContainer.innerHTML = "";
     if (filtrados.length > 0) {
       filtrados.forEach(r => {
-        let item = document.createElement("div");
-        item.textContent = r[1];
-        item.onclick = () => {
-          document.getElementById("filtroB").value = r[1];
-          popup.style.display = "none"; // fecha ao selecionar
+        const div = document.createElement("div");
+        div.className = "item";
+        div.textContent = r[1] || "";
+        div.addEventListener("click", () => {
+          fecharPopup();
           mostrarResultado(r);
-        };
-        popup.appendChild(item);
+        });
+        listaContainer.appendChild(div);
       });
     } else {
-      popup.innerHTML = "<div style='padding:10px;color:#999;'>Nenhum resultado</div>";
+      listaContainer.innerHTML = "<div style='padding:12px;color:#bbb;'>Nenhum resultado</div>";
     }
   }
 
-  // Mostra todos ao focar no campo
-  document.getElementById("filtroB").addEventListener("focus", function () {
-    renderizarLista("");
-    document.getElementById("popupListaB").style.display = "block";
-  });
+  function nameMatches(nome, filtro) {
+    if (!filtro) return true; // sem filtro: corresponde tudo
+    return nome.includes(filtro);
+  }
 
-  // Filtra enquanto digita
-  document.getElementById("filtroB").addEventListener("input", function () {
-    renderizarLista(this.value);
-    document.getElementById("popupListaB").style.display = "block";
-  });
+  // Expor para console (se precisar)
+  window.renderizarPopupLista = renderizarPopupLista;
+});
 
-  // Fecha lista ao clicar fora
-  document.addEventListener("click", function (e) {
-    let campo = document.getElementById("filtroB");
-    let lista = document.getElementById("popupListaB");
-    if (!campo.contains(e.target) && !lista.contains(e.target)) {
-      lista.style.display = "none";
-    }
-  });
-
-// Inicializa carregamento do CSV
+// Chama o carregamento do CSV
 carregarCSV();
 </script>
 </body>
