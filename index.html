@@ -192,6 +192,25 @@
       #pesquisaPopup { font-size:18px; padding:14px; }
       .popup-lista .item { font-size:18px; padding:14px; }
     }
+    #abrirLista {
+      position: fixed;
+      bottom: 49px;   /* acima da assinatura */
+      right: 20px;
+      z-index: 2500;
+      padding: 12px 20px;
+      background: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+      transition: 0.3s;
+    }
+    #abrirLista:hover {
+      background: #005fa3;
+    }
   </style>
 </head>
 <body>
@@ -224,16 +243,14 @@
       <button class="btn-limpar" onclick="limparFiltros()">LIMPAR</button>
     </div>
 
-    <div class="resultado" id="resultado">descrição da atividade selecionada...</div>
-
-    <!-- Botão que abre a lista -->
     <div class="linha" style="margin-top:12px;">
       <label>LISTA DE BAREMOS:</label>
       <button id="abrirLista" class="button-default">Abrir Lista</button>
     </div>
-  </div>
 
-  <!-- POPUP estilo referência (inicia escondido) -->
+    <div class="resultado" id="resultado"></div>
+
+    <!-- POPUP estilo referência (inicia escondido) -->
   <div id="popupBaremos" class="popup" role="dialog" aria-hidden="true">
     <h3 style="margin:0 0 10px 0;">Lista de Baremos</h3>
     <input type="text" id="pesquisaPopup" placeholder="Digite para filtrar...">
