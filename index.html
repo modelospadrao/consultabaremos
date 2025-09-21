@@ -186,6 +186,47 @@
       font-size: 14px;
       color: #555;
     }
+   /* Caixa da lista suspensa */
+    .popup-lista {
+      display: none; /* começa oculta */
+      position: absolute;
+      top: 100%; 
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 4px;
+      z-index: 2000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      font-size: 16px;
+    }
+
+    /* Itens da lista */
+    .popup-lista div {
+      padding: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      transition: background 0.2s;
+    }
+    .popup-lista div:hover {
+      background: #0077cc;
+      color: #fff;
+    }
+
+    /* Responsividade para celular */
+    @media (max-width: 600px) {
+      #filtroB {
+        font-size: 18px;
+        padding: 14px;
+      }
+      .popup-lista {
+        font-size: 18px;
+        max-height: 50vh; /* ocupa metade da tela */
+      }
+    }
 
 
   </style>
@@ -229,11 +270,11 @@
     <div class="resultado" id="resultado">descrição da atividade selecionada...</div><BR>
 
     <!-- Lista suspensa Coluna B -->
-    <div class="linha">
+    <div class="linha" style="position: relative; flex-direction: column; align-items: stretch;">
       <label>LISTA DE BAREMOS:</label>
-      <select id="listaB" onchange="selecionarB()"></select>
+      <input type="text" id="filtroB" placeholder="Digite para filtrar...">
+      <div id="popupListaB" class="popup-lista"></div>
     </div>
-
     
   </div>
   
@@ -357,6 +398,50 @@ function mostrarResultado(registro) {
     </div>
   `;
 }
+ // Renderiza lista suspensa (todos ou filtrados)
+  function renderizarLista(filtro = "") {
+    filtro = filtro.toUpperCase();
+    let filtrados = dados.filter(l => l[1].toUpperCase().includes(filtro) && (!filtroAtivo || l[3] === filtroAtivo));
+
+    let popup = document.getElementById("popupListaB");
+    popup.innerHTML = "";
+
+    if (filtrados.length > 0) {
+      filtrados.forEach(r => {
+        let item = document.createElement("div");
+        item.textContent = r[1];
+        item.onclick = () => {
+          document.getElementById("filtroB").value = r[1];
+          popup.style.display = "none"; // fecha ao selecionar
+          mostrarResultado(r);
+        };
+        popup.appendChild(item);
+      });
+    } else {
+      popup.innerHTML = "<div style='padding:10px;color:#999;'>Nenhum resultado</div>";
+    }
+  }
+
+  // Mostra todos ao focar no campo
+  document.getElementById("filtroB").addEventListener("focus", function () {
+    renderizarLista("");
+    document.getElementById("popupListaB").style.display = "block";
+  });
+
+  // Filtra enquanto digita
+  document.getElementById("filtroB").addEventListener("input", function () {
+    renderizarLista(this.value);
+    document.getElementById("popupListaB").style.display = "block";
+  });
+
+  // Fecha lista ao clicar fora
+  document.addEventListener("click", function (e) {
+    let campo = document.getElementById("filtroB");
+    let lista = document.getElementById("popupListaB");
+    if (!campo.contains(e.target) && !lista.contains(e.target)) {
+      lista.style.display = "none";
+    }
+  });
 
 // Inicializa carregamento do CSV
 carregarCSV();
