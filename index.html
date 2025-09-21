@@ -28,9 +28,9 @@
       flex-direction: column;
       box-sizing: border-box;
     }
-    h2 { text-align:center; margin-bottom:14px; color:#222; font-size:22px; }
+    h2 { text-align:center; margin-bottom:3px; color:#222; font-size:17px; }
     .linha {
-      display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;
+      display:flex; align-items:center; gap:4px; margin-bottom:13px; flex-wrap:wrap;
     }
     .linha label { min-width:140px; font-weight:700; color:#333; }
     .linha input, .linha select {
@@ -135,9 +135,10 @@
       text-align: left;        /* texto dentro da caixa alinhado à esquerda */
     }
 
+    /* Assinatura fixa no rodapé, sem sobrepor */
     .assinatura {
       position: fixed;
-      bottom: 10px;
+      bottom: 4px;       /* gruda no fundo */
       left: 0;
       right: 0;
       text-align: center;
@@ -145,12 +146,22 @@
       font-family: 'Courier New', monospace;
       font-size: 13px;
       color: #555;
-      background: #fff; /* opcional: dá contraste se a descrição for longa */
+      background: #fff;   /* evita sobreposição visual */
+      padding-top: 2px;   /* pequeno respiro da descrição */
     }
 
+    /* A caixa de resultado nunca cola na assinatura */
     .resultado {
-      margin-top: 12px;
-      margin-bottom: 80px; /* espaço reservado para não colidir com a assinatura */
+      background: #f9fbff;
+      border: 1px solid #ccd;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 8px;
+      margin-bottom: 50px;  /* sempre reserva espaço antes da assinatura */
+      font-size: 13px;
+      color: #222;
+      line-height: 1.35;
+      word-wrap: break-word;
     }
 
     /* -------- POPUP (estilo que você enviou) -------- */
