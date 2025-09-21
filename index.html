@@ -90,6 +90,7 @@
       white-space: normal;
       word-wrap: break-word;
       overflow: visible;
+      margin-bottom: 60px; /* empurra o conteúdo antes da assinatura */
     }
 
     /* Cada linha de informação */
@@ -200,7 +201,7 @@
       z-index: 2500;
       */
       padding: 12px 20px;
-      background: #0077cc;
+      background: #000;
       color: #fff;
       border: none;
       border-radius: 12px;
@@ -246,8 +247,7 @@
     </div>
 
     <div class="linha" style="margin-top:12px;">
-      <label>LISTA DE BAREMOS:</label>
-      <button id="abrirLista" class="button-default">Abrir Lista</button>
+      <button id="abrirLista" class="button-default">CONSULTAR LISTA DE BAREMOS</button>
     </div>
 
     <div class="resultado" id="resultado"></div>
@@ -435,3 +435,4 @@ carregarCSV();
 </script>
 </body>
 </html>
+
