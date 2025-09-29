@@ -1,6 +1,6 @@
 COdigo Baremo;Descricao;VOZ;Tipo veIculo (Recurso);Escopo do problema (Ambito);Elemento Problema (Elemento);PrestaCAo;PrestaCAo_NIvel de TensAo;COdigo ACAo;Descricao acao;UN de Medida
 3000020386;Amarracao de arvores com corda (Vegetacao);TBR120;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0614;WB0614_BT;154;AMARRACAO DE ARVORES COM CORDA;UN
-3000019681;Aplicacao de grupo gerador > 160 kVA (Energia emergencial / alta potência);GHO103;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0387;WB0387_BT;155;APLICACAO DE GRUPO GERADOR MAIOR QUE 160 KVA;UN
+3000019681;Aplicacao de grupo gerador > 160 kVA (Energia emergencial / alta potencia);GHO103;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0387;WB0387_BT;155;APLICACAO DE GRUPO GERADOR MAIOR QUE 160 KVA;UN
 3000019491;Aviso de desligamento com assinatura (Comunicacao);AHO722;BT;Rede BT;BT - LBT - Cabo aEreo;WB0200;WB0200_BT;467;AVISO DE DESLIGAMENTO COM ASSINATURA;UN
 3000019988;Aviso de desligamento com assinatura (Comunicacao);AHO722;BT;Rede BT;BT - LBT - Cabo aEreo;WB0200;WB0200_BT;467;AVISO DE DESLIGAMENTO COM ASSINATURA;UN
 3000019489;Aviso de desligamento sem assinatura (Comunicacao);AHO721;BT;Rede BT;BT - LBT - Cabo aEreo;WB0199;WB0199_BT;168;AVISO DE DESLIGAMENTO SEM ASSINATURA;UN
@@ -200,4 +200,4 @@ COdigo Baremo;Descricao;VOZ;Tipo veIculo (Recurso);Escopo do problema (Ambito);E
 5000001356;"Verificacao preventiva ""pre job check"" (Inspecao / Seguranca)";ZHO109;BT;Rede BT;BT - LBT - Rede AErea Nua;ZB0007;ZB0007_BT;170;"Verificacao preventiva ""pre job check""";UN
 3000007777;Visita improdutiva em comissionamento e manutencao de telecontrole (Servico improdutivo);ABR302;MT;Linha MT;MT - LMT - Cabo aEreo;WB0059;WB0059_MT;296;VISITA IMPRODUTIVA EM COMISIONAMENTO E MANUTENCAO DE TELECONTROLE;UN
 3000008367;Visita improdutiva em comissionamento e manutencao de telecontrole (Servico improdutivo);ABR302;MT;Linha MT;MT - LMT - Cabo aEreo;WB0059;WB0059_MT;296;VISITA IMPRODUTIVA EM COMISIONAMENTO E MANUTENCAO DE TELECONTROLE;UN
-3000008492;Vistoria de projetos (Avaliacao / conferência);CBR404;BT;Rede BT;BT - LBT - Cabo aEreo;WB1112;WB1112_BT;297;VISTORIA PROJETOS;UN
+3000008492;Vistoria de projetos (Avaliacao / conferencia);CBR404;BT;Rede BT;BT - LBT - Cabo aEreo;WB1112;WB1112_BT;297;VISTORIA PROJETOS;UN
