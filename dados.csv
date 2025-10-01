@@ -15,9 +15,9 @@ COdigo Baremo;Descricao;VOZ;Tipo veIculo (Recurso);Escopo do problema (Ambito);E
 3000020387;Corte de arvore isolada em linha de baixa tensao (Vegetacao);THO113;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0645;WB0645_BT;160;CORTE DE ARVORE ISOLADA EM LINHA DE BAIXA TENSAO;UN
 3000019854;Corte de arvore isolada em linha de media tensao (Vegetacao);THO105;MT;Linha MT;MT - LMT - Rede AErea Nua;WB0638;WB0638_MT;161;CORTE DE ARVORE ISOLADA EM LINHA DE MEDIA TENSAO;UN
 3000020388;Corte de arvore isolada em linha de media tensao (Vegetacao);THO105;MT;Linha MT;MT - LMT - Rede AErea Nua;WB0638;WB0638_MT;161;CORTE DE ARVORE ISOLADA EM LINHA DE MEDIA TENSAO;UN
-3000019855;Corte de bambu – com retirada de residuos (Vegetacao);TBR117;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0612;WB0612_BT;162;CORTE DE BAMBU - COM RETIRADA DE RESIDUOS;UN
-3000019856;Corte de bambu – sem retirada de residuos (Vegetacao);TBR128;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0621;WB0621_BT;163;CORTE DE BAMBU - SEM RETIRADA DE RESIDUOS;UN
-3000020390;Corte de bambu – sem retirada de residuos (Vegetacao);TBR128;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0621;WB0621_BT;163;CORTE DE BAMBU - SEM RETIRADA DE RESIDUOS;UN
+3000019855;Corte de bambu > com retirada de residuos (Vegetacao);TBR117;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0612;WB0612_BT;162;CORTE DE BAMBU - COM RETIRADA DE RESIDUOS;UN
+3000019856;Corte de bambu > sem retirada de residuos (Vegetacao);TBR128;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0621;WB0621_BT;163;CORTE DE BAMBU - SEM RETIRADA DE RESIDUOS;UN
+3000020390;Corte de bambu > sem retirada de residuos (Vegetacao);TBR128;BT;Rede BT;BT - LBT - Rede AErea Nua;WB0621;WB0621_BT;163;CORTE DE BAMBU - SEM RETIRADA DE RESIDUOS;UN
 5000002775;Desconexao de pontes bypass de media tensao com linha viva (Rede eletrica MT);ABR512;MT;Linha MT;MT - LMT - Rede AErea Nua;WB0696;WB0696_MT;164;DESCONEXAO DE PONTES (BYPASS) DE MEDIA TENSAO COM LINHA VIVA;CJT
 5000003285;Desconexao de pontes bypass de media tensao com linha viva (Rede eletrica MT);ABR512;MT;Linha MT;MT - LMT - Rede AErea Nua;WB0696;WB0696_MT;164;DESCONEXAO DE PONTES (BYPASS) DE MEDIA TENSAO COM LINHA VIVA;CJT
 5000003129;Desconexao de pontes bypass de media tensao com linha viva em substituicao (Rede eletrica MT);ABR514;MT;Linha MT;MT - LMT - Rede AErea Nua;WB0700;WB0700_MT;165;DESCONEXAO DE PONTES (BYPASS) DE MEDIA TENSAO COM LINHA VIVA  EM SUBSTITUICAO;CJT
