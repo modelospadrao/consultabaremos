@@ -251,20 +251,17 @@
     <!-- Pesquisas A / C / G -->
     <div class="linha">
       <label>Código Baremo:</label>
-      <input type="text" id="pesqA" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-      <button onclick="pesquisar('A')">🔍</button>
+      <button onclick="abrirDigitar('A')" class="button-default" style="flex:1;">🔍 BUSCAR</button>
     </div>
 
     <div class="linha">
       <label>CODIGO DE VOZ:</label>
-      <input type="text" id="pesqC" maxlength="6" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
-      <button onclick="pesquisar('C')">🔍</button>
+      <button onclick="abrirDigitar('C')" class="button-default" style="flex:1;">🔍 BUSCAR</button>
     </div>
 
     <div class="linha">
       <label>CODIGO PRESTAÇÃO:</label>
-      <input type="text" id="pesqG" maxlength="6" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()">
-      <button onclick="pesquisar('G')">🔍</button>
+      <button onclick="abrirDigitar('G')" class="button-default" style="flex:1;">🔍 BUSCAR</button>
     </div>
 
     <div class="btn-grupo">
@@ -279,7 +276,7 @@
 
     <div class="resultado" id="resultado"></div>
 
-    <!-- POPUP estilo referência (inicia escondido) -->
+    <!-- POPUP lista baremos (inicia escondido) -->
   <div id="popupBaremos" class="popup" role="dialog" aria-hidden="true">
     <h3 style="margin:0 0 10px 0;">Lista de Baremos</h3>
     <input type="text" id="pesquisaPopup" placeholder="Digite para filtrar...">
@@ -288,6 +285,41 @@
       <button id="fecharPopup" class="button-clear">Fechar</button>
     </div>
   </div>
+
+  </div><!-- /container -->
+
+<!-- OVERLAY -->
+<div id="popupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);z-index:900;"></div>
+
+<!-- POPUP: LGPD -->
+<div id="popup-lgpd" style="display:none;flex-direction:column;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,20,0.97);color:#fff;border-radius:16px;z-index:1100;max-width:96vw;width:420px;max-height:88vh;overflow:hidden;box-shadow:0 0 24px rgba(0,0,0,0.7);">
+  <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.12);">
+    <button onclick="fecharLGPD()" style="background:#00b145;color:#fff;font-weight:bold;width:100%;padding:12px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;">✔ LI E ESTOU DE ACORDO</button>
+  </div>
+  <div style="overflow-y:auto;padding:14px 16px;flex:1;">
+    <div style="border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:12px;font-size:11px;color:#ccc;text-align:left;line-height:1.8;margin-bottom:10px;background:rgba(255,255,255,0.04);">
+      🔒 <strong style="color:#fff;font-size:12px;">Nota 1 — Privacidade &amp; LGPD</strong><br><br>
+      Este aplicativo <strong style="color:#fff;">não coleta, não armazena e não transmite</strong> nenhuma informação a servidores externos. Todos os dados ficam exclusivamente no seu dispositivo.<br><br>
+      Em conformidade com a <strong style="color:#fff;">LGPD — Lei nº 13.709/2018</strong>.
+    </div>
+    <div style="border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:12px;font-size:11px;color:#ccc;text-align:left;line-height:1.8;background:rgba(255,255,255,0.04);">
+      📡 <strong style="color:#fff;font-size:12px;">Nota 2 — Natureza dos Dados</strong><br><br>
+      Os dados consultados — códigos de baremo, voz e prestação — são <strong style="color:#fff;">dados operacionais de infraestrutura</strong>, não configurando dados pessoais conforme o <strong style="color:#fff;">Art. 5º, I da LGPD</strong>.
+    </div>
+  </div>
+</div>
+
+<!-- POPUP: DIGITAR CÓDIGO -->
+<div id="popup-digitar" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(20,20,20,0.97);color:#fff;border-radius:16px;z-index:1200;max-width:92vw;width:340px;padding:24px;box-shadow:0 0 24px rgba(0,0,0,0.7);text-align:center;box-sizing:border-box;">
+  <div id="popup-digitar-titulo" style="font-size:14px;font-weight:bold;margin-bottom:14px;color:#fff;"></div>
+  <input type="text" id="popup-digitar-input"
+    style="width:100%;padding:12px;font-size:18px;letter-spacing:2px;font-weight:bold;text-align:center;box-sizing:border-box;border:2px solid #aaa;border-radius:8px;background:#f0f0f0;color:#000;font-family:inherit;text-transform:uppercase;">
+  <div id="popup-digitar-dica" style="font-size:11px;color:#aaa;margin:6px 0 16px 0;"></div>
+  <div style="display:flex;gap:8px;">
+    <button onclick="confirmarDigitar()" style="flex:1;background:#0077cc;color:#fff;font-weight:bold;padding:12px;border:none;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;">🔍 PESQUISAR</button>
+    <button onclick="fecharDigitar()" style="background:#555;color:#fff;padding:12px 16px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-family:inherit;">✖</button>
+  </div>
+</div>
 
 <script>
 /* ---------------- Dados / funções principais ---------------- */
@@ -324,16 +356,76 @@ function atualizarLista(incluirDuplicados = false) {
   lista.innerHTML = `<option value="">--SELECIONE--</option>` + valoresB.map(v => `<option>${v}</option>`).join("");
 }
 
-function pesquisar(coluna) {
+function pesquisar(coluna, valor) {
   let idxMap = { "A": 0, "C": 2, "G": 6 };
   let idx = idxMap[coluna];
-  let inputId = { "A": "pesqA", "C": "pesqC", "G": "pesqG" }[coluna];
-  let valor = document.getElementById(inputId).value.trim().toUpperCase();
-  if (!valor) return alert("DIGITE UM VALOR!");
+  valor = (valor || '').trim().toUpperCase();
+  if (!valor) return;
   let registro = dados.find(l => (l[idx] || "").toUpperCase() === valor);
   if (registro) mostrarResultado(registro);
   else document.getElementById("resultado").innerText = "NENHUM REGISTRO ENCONTRADO!";
 }
+
+// ── POPUP DIGITAR CÓDIGO ────────────────────────────────────
+let colunaAtiva = null;
+const cfgColunas = {
+  'A': { titulo:'🔢 CÓDIGO BAREMO',    dica:'Digite apenas números', maxlen:10, tipo:'num'   },
+  'C': { titulo:'🔤 CÓDIGO DE VOZ',    dica:'Letras e números',      maxlen:6,  tipo:'alnum' },
+  'G': { titulo:'🔤 CÓDIGO PRESTAÇÃO', dica:'Letras e números',      maxlen:6,  tipo:'alnum' }
+};
+function abrirDigitar(coluna) {
+  colunaAtiva = coluna;
+  const cfg = cfgColunas[coluna];
+  document.getElementById('popup-digitar-titulo').textContent = cfg.titulo;
+  document.getElementById('popup-digitar-dica').textContent   = cfg.dica;
+  document.getElementById('popup-digitar-dica').style.color   = '#aaa';
+  const inp = document.getElementById('popup-digitar-input');
+  inp.value = '';
+  inp.maxLength = cfg.maxlen;
+  document.getElementById('popup-digitar').style.display = 'block';
+  document.getElementById('popupOverlay').style.display  = 'block';
+  setTimeout(() => inp.focus(), 100);
+}
+function fecharDigitar() {
+  document.getElementById('popup-digitar').style.display = 'none';
+  document.getElementById('popupOverlay').style.display  = 'none';
+  colunaAtiva = null;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('popup-digitar-input').addEventListener('input', function() {
+    const cfg = cfgColunas[colunaAtiva];
+    if (!cfg) return;
+    if (cfg.tipo === 'num')   this.value = this.value.replace(/[^0-9]/g, '');
+    if (cfg.tipo === 'alnum') this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+  });
+  document.getElementById('popup-digitar-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmarDigitar();
+  });
+});
+function confirmarDigitar() {
+  const valor = document.getElementById('popup-digitar-input').value.trim();
+  if (!valor) {
+    document.getElementById('popup-digitar-dica').style.color = '#e63946';
+    document.getElementById('popup-digitar-dica').textContent = '⚠️ Digite um valor antes de pesquisar!';
+    return;
+  }
+  const col = colunaAtiva;
+  fecharDigitar();
+  pesquisar(col, valor);
+}
+
+// ── POPUP LGPD ─────────────────────────────────────────────
+function fecharLGPD() {
+  document.getElementById('popup-lgpd').style.display    = 'none';
+  document.getElementById('popupOverlay').style.display  = 'none';
+}
+
+// ── INIT ───────────────────────────────────────────────────
+window.onload = function() {
+  carregarCSV();
+  document.getElementById('popup-lgpd').style.display   = 'flex';
+  document.getElementById('popupOverlay').style.display = 'block';
+};
 
 function filtrarTipo(tipo, botao) {
   document.querySelectorAll(".btn-grupo button").forEach(b => b.classList.remove("ativo"));
@@ -456,9 +548,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Expor para console (se precisar)
   window.renderizarPopupLista = renderizarPopupLista;
 });
-
-// Chama o carregamento do CSV
-carregarCSV();
 </script>
 </body>
 </html>
